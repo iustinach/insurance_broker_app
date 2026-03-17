@@ -5,8 +5,7 @@ class Program
 {
     static void Main()
     {
-        Client[] clienti = new Client[100];
-        int nrClienti = 0;
+       List<Client> clienti=new List<Client>();
 
         int optiune;
 
@@ -24,15 +23,15 @@ class Program
             switch (optiune)
             {
                 case 1:
-                    clienti[nrClienti++] = CitesteClient();
+                    clienti.Add(CitesteClient());
                     break;
 
                 case 2:
-                    AfiseazaClienti(clienti, nrClienti);
+                    AfiseazaClienti(clienti);
                     break;
 
                 case 3:
-                    CautaClient(clienti, nrClienti);
+                    CautaClient(clienti);
                     break;
             }
 
@@ -58,32 +57,31 @@ class Program
         return c;
     }
 
-    static void AfiseazaClienti(Client[] clienti, int n)
+    static void AfiseazaClienti(List<Client> clienti)
     {
         Console.WriteLine("\nLista clienti:");
 
-        for (int i = 0; i < n; i++)
+        foreach (var client in clienti)
         {
-            Console.WriteLine(clienti[i]);
+            Console.WriteLine(client);
         }
     }
 
-    static void CautaClient(Client[] clienti, int n)
+    static void CautaClient(List<Client> clienti)
     {
         Console.Write("Introdu numele clientului: ");
         string nume = Console.ReadLine();
 
         bool gasit = false;
 
-        for (int i = 0; i < n; i++)
+        foreach (var client in clienti)
         {
-            if (clienti[i].Nume.Equals(nume, StringComparison.OrdinalIgnoreCase))
+            if (client.Nume.Equals(nume, StringComparison.OrdinalIgnoreCase))
             {
-                Console.WriteLine(clienti[i]);
+                Console.WriteLine(client);
                 gasit = true;
             }
         }
-
         if (!gasit)
             Console.WriteLine("Clientul nu a fost gasit.");
     }
