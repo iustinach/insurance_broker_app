@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InsuranceBrokerApp.Models
+namespace Modele
 {
     public class CompanieAsigurare
     {

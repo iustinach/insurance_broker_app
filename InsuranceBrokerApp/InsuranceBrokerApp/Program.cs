@@ -1,11 +1,20 @@
 ﻿using System;
-using InsuranceBrokerApp.Models;
+using System.Runtime.ConstrainedExecution;
+using Modele;
+using StocareDate;
 
 class Program
 {
     static void Main()
     {
        List<Client> clienti=new List<Client>();
+
+        AdministratorClienti admin = new AdministratorClienti();
+        admin.AdaugaClient(new Client { Id = 1, Nume = "Ana", Telefon = "0790567876" });
+        var rezultate = admin.CautaDupaNume("Ana");
+        foreach(var c in rezultate)
+        { Console.WriteLine(c); }
+
 
         int optiune;
 
@@ -23,7 +32,9 @@ class Program
             switch (optiune)
             {
                 case 1:
-                    clienti.Add(CitesteClient());
+                    Client c = CitesteClient();
+                    clienti.Add(c);
+                    admin.AdaugaClient(c);
                     break;
 
                 case 2:
@@ -31,7 +42,14 @@ class Program
                     break;
 
                 case 3:
-                    CautaClient(clienti);
+                    Console.WriteLine("Introdu numele: ");
+                    string nume=Console.ReadLine();
+                    var rez=admin.CautaDupaNume(nume);
+
+                    foreach (var val in rez)
+                    { Console.WriteLine(val); }
+                    if(rez.Count==0)
+                    { Console.WriteLine("Nu s-a gasit niciun client."); }
                     break;
             }
 

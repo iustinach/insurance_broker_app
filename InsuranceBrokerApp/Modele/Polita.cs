@@ -4,8 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InsuranceBrokerApp.Models
+namespace Modele
 {
+    public enum TipPolita
+    {
+        RCA,
+        CASCO,
+        Locuinta,
+        Viata
+    }
+
+    [Flags]
+    public enum OptiuniPolita
+    {
+        None = 0,
+        Urgenta=1,
+        Suport24_7=2,
+        AsistentaRutiera=4
+    }
     public class Polita
     {
         public int Id { get; set; }
