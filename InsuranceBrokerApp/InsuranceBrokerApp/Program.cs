@@ -10,10 +10,7 @@ class Program
        List<Client> clienti=new List<Client>();
 
         AdministratorClienti admin = new AdministratorClienti();
-        admin.AdaugaClient(new Client { Id = 1, Nume = "Ana", Telefon = "0790567876" });
-        var rezultate = admin.CautaDupaNume("Ana");
-        foreach(var c in rezultate)
-        { Console.WriteLine(c); }
+
 
 
         int optiune;
@@ -33,8 +30,11 @@ class Program
             {
                 case 1:
                     Client c = CitesteClient();
-                    clienti.Add(c);
-                    admin.AdaugaClient(c);
+                    if (admin.AdaugaClient(c))
+                    {
+                        clienti.Add(c);
+                        Console.WriteLine("Client adaugat cu succes!");
+                    }
                     break;
 
                 case 2:
@@ -66,8 +66,18 @@ class Program
         Console.Write("Nume client: ");
         c.Nume = Console.ReadLine();
 
-        Console.Write("CNP: ");
-        c.CNP = Console.ReadLine();
+        string cnp;
+        do
+        {
+            Console.WriteLine("CNP: ");
+            cnp = Console.ReadLine().Trim();
+
+            if(cnp.Length!=13||!cnp.All(char.IsDigit))
+            {
+                Console.WriteLine("CNP invalid!");
+            }
+        }while(cnp.Length !=13 || !cnp.All(char.IsDigit));
+        c.CNP = cnp;
 
         Console.Write("Telefon: ");
         c.Telefon = Console.ReadLine();
