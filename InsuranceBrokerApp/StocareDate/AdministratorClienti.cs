@@ -7,24 +7,20 @@ namespace StocareDate
     public class AdministratorClienti
     {
         private List<Client> clienti = new List<Client>();
+        int nextId = 1;
 
         public bool AdaugaClient(Client c)
         {
             if(clienti.Any(x=>x.CNP == c.CNP))
             {
-                Console.WriteLine("CNP deja existent!");
                 return false;
             }
-            if (clienti.Any(x => x.Id == c.Id))
-            {
-                Console.WriteLine("ID deja existent!");
-                return false;
-            }
+            
             if (clienti.Any(x => x.Telefon == c.Telefon))
             {
-                Console.WriteLine("Telefon deja existent!");
                 return false;
             }
+            c.Id = nextId++;
             clienti.Add(c);
             return true;
         }

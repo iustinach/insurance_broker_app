@@ -24,7 +24,13 @@ class Program
             Console.WriteLine("0. Iesire");
 
             Console.Write("Alege optiunea: ");
-            optiune = int.Parse(Console.ReadLine());
+
+            if (!int.TryParse(Console.ReadLine(), out optiune))
+            {
+                Console.WriteLine("Optiune inexistenta!");
+                optiune = -1;
+                continue;
+            }
 
             switch (optiune)
             {
@@ -34,8 +40,14 @@ class Program
                     {
                         clienti.Add(c);
                         Console.WriteLine("Client adaugat cu succes!");
+                        Polita p = CitestePolita();
+                        c.Polite.Add(p);
                     }
-                    break;
+                    else
+                    {
+                        Console.WriteLine("CNP sau telefon deja existent!");
+                    }
+                        break;
 
                 case 2:
                     AfiseazaClienti(clienti);
@@ -46,10 +58,18 @@ class Program
                     string nume=Console.ReadLine();
                     var rez=admin.CautaDupaNume(nume);
 
-                    foreach (var val in rez)
-                    { Console.WriteLine(val); }
-                    if(rez.Count==0)
-                    { Console.WriteLine("Nu s-a gasit niciun client."); }
+                    if (rez.Count == 0)
+                    {
+                        Console.WriteLine("Nu s-a gasit niciun client.");
+                    }
+                    else
+                    {
+                        foreach (var val in rez)
+                        { Console.WriteLine(val); }
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Optiune inexistenta!");
                     break;
             }
 
@@ -59,9 +79,6 @@ class Program
     static Client CitesteClient()
     {
         Client c = new Client();
-
-        Console.Write("ID client: ");
-        c.Id = int.Parse(Console.ReadLine());
 
         Console.Write("Nume client: ");
         c.Nume = Console.ReadLine();
@@ -112,5 +129,55 @@ class Program
         }
         if (!gasit)
             Console.WriteLine("Clientul nu a fost gasit.");
+    }
+    static Polita CitestePolita()
+    {
+        Polita p = new Polita();
+
+        Console.WriteLine("Alege tip polita:");
+        Console.WriteLine("1. RCA");
+        Console.WriteLine("2. CASCO");
+        Console.WriteLine("3. Locuinta");
+        Console.WriteLine("4. Viata");
+
+        int opt;
+
+        while (!int.TryParse(Console.ReadLine(), out opt) || opt < 1 || opt > 4)
+        {
+            Console.WriteLine("Optiune invalida!");
+        }
+
+        p.Tip = (TipPolita)(opt - 1); 
+
+        Console.WriteLine("Alege optiuni (0 - fara):");
+        Console.WriteLine("1. Urgenta");
+        Console.WriteLine("2. Suport 24/7");
+        Console.WriteLine("3. Asistenta rutiera");
+
+        int opt2;
+        p.Optiuni = OptiuniPolita.None;
+
+        while (true)
+        {
+            if (!int.TryParse(Console.ReadLine(), out opt2))
+            {
+                Console.WriteLine("Optiune invalida!");
+                continue;
+            }
+
+            if (opt2 == 0) break;
+
+            switch (opt2)
+            {
+                case 1: p.Optiuni |= OptiuniPolita.Urgenta; break;
+                case 2: p.Optiuni |= OptiuniPolita.Suport24_7; break;
+                case 3: p.Optiuni |= OptiuniPolita.AsistentaRutiera; break;
+                default:
+                    Console.WriteLine("Optiune invalida!");
+                    break;
+            }
+        }
+
+        return p;
     }
 }
