@@ -1,0 +1,3 @@
+1;Chiriloaea Iustina;1234567890000;0790465345|RCA,None
+2;Popescu Vasile;0000123456789;0756882100|Locuinta,None
+4;Andron Marius;1234567890002;0789666555|CASCO,AsistentaRutiera

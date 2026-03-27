@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using System.Runtime.ConstrainedExecution;
+using InsuranceBrokerApp;
 using Modele;
 using StocareDate;
 
@@ -7,12 +9,7 @@ class Program
 {
     static void Main()
     {
-       List<Client> clienti=new List<Client>();
-
-        AdministratorClienti admin = new AdministratorClienti();
-
-
-
+        IStocareClienti admin = StocareFactory.GetStocare();
         int optiune;
 
         do
@@ -21,6 +18,8 @@ class Program
             Console.WriteLine("1. Adauga client");
             Console.WriteLine("2. Afiseaza clienti");
             Console.WriteLine("3. Cauta client dupa nume");
+            Console.WriteLine("4. Modifica telefon client");
+            Console.WriteLine("5. Sterge client");
             Console.WriteLine("0. Iesire");
 
             Console.Write("Alege optiunea: ");
@@ -36,21 +35,27 @@ class Program
             {
                 case 1:
                     Client c = CitesteClient();
+
+                    Polita p = CitestePolita();
+                    c.Polite.Add(p);
+
                     if (admin.AdaugaClient(c))
                     {
-                        clienti.Add(c);
                         Console.WriteLine("Client adaugat cu succes!");
-                        Polita p = CitestePolita();
-                        c.Polite.Add(p);
                     }
                     else
                     {
                         Console.WriteLine("CNP sau telefon deja existent!");
                     }
-                        break;
+                    break;
 
                 case 2:
-                    AfiseazaClienti(clienti);
+                    var clienti = admin.GetAll();
+
+                    foreach (var client in clienti)
+                    {
+                        Console.WriteLine(client);
+                    }
                     break;
 
                 case 3:
@@ -68,6 +73,26 @@ class Program
                         { Console.WriteLine(val); }
                     }
                     break;
+                case 4:
+                    Console.Write("Introdu ID client: ");
+                    int id = int.Parse(Console.ReadLine());
+
+                    Console.Write("Introdu telefon nou: ");
+                    string telefonNou = Console.ReadLine();
+
+                    admin.ModificaTelefon(id, telefonNou);
+
+                    Console.WriteLine("Telefon actualizat!");
+                    break;
+                case 5:
+                    Console.Write("Introdu ID client de sters: ");
+                    int idStergere = int.Parse(Console.ReadLine());
+
+                    admin.StergeClient(idStergere);
+
+                    Console.WriteLine("Client sters (daca exista).");
+                    break;
+
                 default:
                     Console.WriteLine("Optiune inexistenta!");
                     break;
@@ -176,6 +201,7 @@ class Program
                     Console.WriteLine("Optiune invalida!");
                     break;
             }
+            break;
         }
 
         return p;

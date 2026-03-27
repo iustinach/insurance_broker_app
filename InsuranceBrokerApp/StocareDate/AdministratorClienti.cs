@@ -4,7 +4,7 @@ using Modele;
 
 namespace StocareDate
 {
-    public class AdministratorClienti
+    public class AdministratorClienti : IStocareClienti
     {
         private List<Client> clienti = new List<Client>();
         int nextId = 1;
@@ -35,6 +35,25 @@ namespace StocareDate
         public List<Client> GetAll()
         {
             return clienti;
+        }
+        public void ModificaTelefon(int id, string telefonNou)
+        {
+            foreach (var c in clienti)
+            {
+                if (c.Id == id)
+                {
+                    c.Telefon = telefonNou;
+                }
+            }
+        }
+        public void StergeClient(int id)
+        {
+            var client = clienti.FirstOrDefault(c => c.Id == id);
+
+            if (client != null)
+            {
+                clienti.Remove(client);
+            }
         }
     }
 }
