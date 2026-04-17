@@ -3,55 +3,118 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Clienti" Height="350" Width="500">
 
-    <Grid Background="Lavender">
-        <Border Padding="15">
-            <StackPanel>
+    <Grid Background="Lavender" Margin="10">
 
-                <TextBlock Text="Informatii Client"
-                           FontSize="22"
-                           Foreground="DarkBlue"
-                           FontWeight="Bold"
-                           Margin="0,0,0,15"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            
+        </Grid.RowDefinitions>
 
-                
-                <TextBlock Text="Nume:"
-                           Foreground="DarkBlue"
-                           FontWeight="Bold"/>
-                <TextBox x:Name="txtNume"
-                         Margin="0,5,0,10"
-                         Background="White"
-                         Width="250"
-                         HorizontalAlignment="Left"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-                
-                <TextBlock Text="Telefon:"
-                           FontWeight="Bold"
-                           Foreground="DarkBlue"/>
-                <TextBox x:Name="txtTelefon"
-                         Margin="0,5,0,10"
-                         Background="White"
-                         Width="250"
-                         HorizontalAlignment="Left"/>
+     
+        <TextBlock Text="Informatii Client"
+               Grid.ColumnSpan="2"
+               FontSize="22"
+               FontWeight="Bold"
+               Foreground="DarkBlue"
+               Margin="0,0,0,15"/>
 
-               
-                <Button Content="Afiseaza"
-                        Background="CornflowerBlue"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        Padding="6"
-                        Width="120"
-                        HorizontalAlignment="Left"
-                        Click="Button_Click"/>
+     
+        <TextBlock Text="Nume:"
+               Grid.Row="1"
+               Grid.Column="0"
+               VerticalAlignment="Center"/>
 
-                
-                <TextBlock x:Name="txtRezultat"
-                           Margin="0,15,0,0"
-                           FontWeight="Bold"
-                           TextWrapping="Wrap"
-                           Foreground="DarkGreen"
-                           FontSize="14"/>
+        <TextBox x:Name="txtNume"
+             Grid.Row="1"
+             Grid.Column="1"
+             Margin="5"/>
 
-            </StackPanel>
-        </Border>
+     
+        <TextBlock Text="Telefon:"
+               Grid.Row="2"
+               Grid.Column="0"
+               VerticalAlignment="Center"/>
+
+        <TextBox x:Name="txtTelefon"
+             Grid.Row="2"
+             Grid.Column="1"
+             Margin="5"/>
+
+      
+        <TextBlock Text="CNP:"
+               Grid.Row="3"
+               Grid.Column="0"
+               VerticalAlignment="Center"/>
+
+        <TextBox x:Name="txtCNP"
+             Grid.Row="3"
+             Grid.Column="1"
+             Margin="5"/>
+
+      
+        <TextBlock Text="Tip polita:"
+               Grid.Row="4"
+               Grid.Column="0"
+               VerticalAlignment="Center"/>
+
+        <ComboBox x:Name="cmbTipPolita"
+              Grid.Row="4"
+              Grid.Column="1"
+              Margin="5">
+            <ComboBoxItem Content="RCA"/>
+            <ComboBoxItem Content="CASCO"/>
+            <ComboBoxItem Content="Locuinta"/>
+            <ComboBoxItem Content="Viata"/>
+        </ComboBox>
+
+
+        <Button Content="Adauga"
+           Grid.Row="5"
+           Grid.Column="1"
+           Width="120"
+           Height="35"
+           Margin="5"
+           HorizontalAlignment="Left"
+           Background="CornflowerBlue"
+           Foreground="White"
+           Click="Button_Click"/>
+        <TextBlock x:Name="txtRezultat"
+            Grid.Row="6"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Foreground="DarkGreen"
+            FontWeight="Bold"/>
+        <Button Content="Sterge client"
+            Click="Sterge_Click"
+            Width="140"
+            Grid.Row="8"
+            Grid.Column="1"
+            Height="35"
+            Margin="0,10,0,0"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            HorizontalAlignment="Right"
+            Background="IndianRed"
+            Foreground="White"/>
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,20,0,0">
+            <TextBlock Text="Lista clienti:" FontWeight="Bold"/>
+            <ListBox x:Name="lstClienti" Height="120"/>
+        </StackPanel>
+
     </Grid>
 </Window>
