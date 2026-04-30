@@ -13,6 +13,7 @@ namespace StocareDate
         List<Client> GetAll();
         List<Client> CautaDupaNume(string nume);
         void ModificaTelefon(int id, string telefonNou);
-        void StergeClient(int id);
+        void ModificaClient(Client c);
+
     }
 }

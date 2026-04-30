@@ -46,13 +46,15 @@ namespace StocareDate
                 }
             }
         }
-        public void StergeClient(int id)
+        public void ModificaClient(Client clientModificat)
         {
-            var client = clienti.FirstOrDefault(c => c.Id == id);
-
-            if (client != null)
+            var c = clienti.FirstOrDefault(x => x.Id == clientModificat.Id);
+            if (c != null)
             {
-                clienti.Remove(client);
+                c.Nume = clientModificat.Nume;
+                c.Telefon = clientModificat.Telefon;
+                c.CNP = clientModificat.CNP;
+                c.Polite = clientModificat.Polite;
             }
         }
     }

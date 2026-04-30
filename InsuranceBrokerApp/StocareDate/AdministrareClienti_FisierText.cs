@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Modele;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StocareDate
 {
@@ -89,9 +90,10 @@ namespace StocareDate
         public List<Client> CautaDupaNume(string nume)
         {
             return GetAll()
-                .Where(c => c.Nume.Split(' ')[0]
-                .Equals(nume.Trim(), StringComparison.OrdinalIgnoreCase))
-                .ToList();
+             .Where(c => c.Nume
+        .ToLower()
+        .Contains(nume.ToLower()))
+        .ToList();
         }
 
         public void ModificaTelefon(int id, string telefonNou)
@@ -119,11 +121,18 @@ namespace StocareDate
                 }
             }
         }
-        public void StergeClient(int id)
+        public void ModificaClient(Client clientModificat)
         {
             var clienti = GetAll();
 
-            clienti = clienti.Where(c => c.Id != id).ToList();
+            for (int i = 0; i < clienti.Count; i++)
+            {
+                if (clienti[i].Id == clientModificat.Id)
+                {
+                    clienti[i] = clientModificat;
+                    break;
+                }
+            }
 
             using (StreamWriter sw = new StreamWriter(numeFisier))
             {
