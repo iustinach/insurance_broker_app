@@ -38,7 +38,7 @@ namespace StocareDate
 
                 foreach (var p in c.Polite)
                 {
-                    linie += $"|{p.Tip},{p.Optiuni}";
+                    linie += $"|{p.Tip},{p.Optiuni},{p.DataInceput},{p.DataExpirare}";
                 }
 
                 sw.WriteLine(linie);
@@ -75,7 +75,9 @@ namespace StocareDate
                     Polita p = new Polita
                     {
                         Tip = (TipPolita)Enum.Parse(typeof(TipPolita), pData[0]),
-                        Optiuni = (OptiuniPolita)Enum.Parse(typeof(OptiuniPolita), pData[1])
+                        Optiuni = (OptiuniPolita)Enum.Parse(typeof(OptiuniPolita), pData[1]),
+                        DataInceput = DateTime.Parse(pData[2]),
+                        DataExpirare = DateTime.Parse(pData[3])
                     };
 
                     c.Polite.Add(p);
@@ -142,7 +144,7 @@ namespace StocareDate
 
                     foreach (var p in c.Polite)
                     {
-                        linie += $"|{p.Tip},{p.Optiuni}";
+                        linie += $"|{p.Tip},{p.Optiuni},{p.DataInceput},{p.DataExpirare}";
                     }
 
                     sw.WriteLine(linie);

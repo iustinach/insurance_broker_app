@@ -31,35 +31,6 @@ namespace InsuranceBrokerApp_UI
         {
             if (Valideaza(out string mesaj))
             {
-
-                string tipSelectat = "";
-
-                if (rbRCA.IsChecked == true) tipSelectat = "RCA";
-                else if (rbCASCO.IsChecked == true) tipSelectat = "CASCO";
-                else if (rbLocuinta.IsChecked == true) tipSelectat = "Locuinta";
-                else if (rbViata.IsChecked == true) tipSelectat = "Viata";
-
-                if (tipSelectat == "")
-                {
-                    txtRezultat.Text = "Selecteaza tip polita!";
-                    return;
-                }
-                OptiuniPolita optiuni = OptiuniPolita.None;
-
-                if (chkUrgenta.IsChecked == true)
-                    optiuni |= OptiuniPolita.Urgenta;
-
-                if (chkSuport.IsChecked == true)
-                    optiuni |= OptiuniPolita.Suport24_7;
-
-                if (chkAsistenta.IsChecked == true)
-                    optiuni |= OptiuniPolita.AsistentaRutiera;
-                Polita p = new Polita
-                {
-                    Tip = (TipPolita)Enum.Parse(typeof(TipPolita), tipSelectat),
-                    Optiuni = optiuni
-                };
-
                 Client c = new Client
                 {
                     Nume = txtNume.Text,
@@ -67,14 +38,13 @@ namespace InsuranceBrokerApp_UI
                     CNP = txtCNP.Text
                 };
 
-                c.Polite.Add(p);
-
                 bool adaugat = admin.AdaugaClient(c); 
 
                 if (adaugat)
                 {
                     txtRezultat.Text = "Client adaugat!";
                     AfiseazaClienti();
+                    IncarcaClientiCombo();
                     txtNume.Clear();
                     txtTelefon.Clear();
                     txtCNP.Clear();
@@ -89,6 +59,7 @@ namespace InsuranceBrokerApp_UI
             {
                 txtRezultat.Text = mesaj;
             }
+
         }
         bool Valideaza(out string mesaj)
         {
@@ -140,7 +111,9 @@ namespace InsuranceBrokerApp_UI
                 return;
             }
 
-            Client client = cmbClienti.SelectedItem as Client;
+            int id = int.Parse(lstClienti.SelectedItem.ToString().Split('.')[0]);
+
+            var client = admin.GetAll().FirstOrDefault(c => c.Id == id);
 
             if (client == null)
             {
@@ -148,32 +121,8 @@ namespace InsuranceBrokerApp_UI
                 return;
             }
 
-            int id = client.Id;
-            string tipSelectat = "";
-            OptiuniPolita optiuni = OptiuniPolita.None;
-            if (rbRCA.IsChecked == true) tipSelectat = "RCA";
-            else if (rbCASCO.IsChecked == true) tipSelectat = "CASCO";
-            else if (rbLocuinta.IsChecked == true) tipSelectat = "Locuinta";
-            else if (rbViata.IsChecked == true) tipSelectat = "Viata";
-
-            if (tipSelectat == "")
-            {
-                MessageBox.Show("Selecteaza tip polita!");
-                return;
-            }
-            if (chkUrgenta.IsChecked == true)
-                optiuni |= OptiuniPolita.Urgenta;
-
-            if (chkSuport.IsChecked == true)
-                optiuni |= OptiuniPolita.Suport24_7;
-
-            if (chkAsistenta.IsChecked == true)
-                optiuni |= OptiuniPolita.AsistentaRutiera;
-            Polita p = new Polita
-            {
-                Tip = (TipPolita)Enum.Parse(typeof(TipPolita), tipSelectat),
-                Optiuni = optiuni
-            };
+            
+           
 
             Client c = new Client
             {
@@ -181,7 +130,8 @@ namespace InsuranceBrokerApp_UI
                 Nume = txtNume.Text,
                 Telefon = txtTelefon.Text,
                 CNP = txtCNP.Text,
-                Polite = new List<Polita> { p }
+                Polite = client.Polite
+
             };
 
             admin.ModificaClient(c);
@@ -207,15 +157,7 @@ namespace InsuranceBrokerApp_UI
                 txtCNP.Text = client.CNP;
 
             }
-            if (client.Polite.Count > 0)
-            {
-                var tip = client.Polite[0].Tip;
-
-                rbRCA.IsChecked = tip == TipPolita.RCA;
-                rbCASCO.IsChecked = tip == TipPolita.CASCO;
-                rbLocuinta.IsChecked = tip == TipPolita.Locuinta;
-                rbViata.IsChecked = tip == TipPolita.Viata;
-            }
+           
         }
 
         private void Cauta_Click(object sender, RoutedEventArgs e)
@@ -280,16 +222,7 @@ namespace InsuranceBrokerApp_UI
             {
                 Modifica_Click(sender, e);
             }
-            OptiuniPolita optiuni = OptiuniPolita.None;
-
-            if (chkUrgenta.IsChecked == true)
-                optiuni |= OptiuniPolita.Urgenta;
-
-            if (chkSuport.IsChecked == true)
-                optiuni |= OptiuniPolita.Suport24_7;
-
-            if (chkAsistenta.IsChecked == true)
-                optiuni |= OptiuniPolita.AsistentaRutiera;
+            
         }
         private void MenuClienti_Click(object sender, RoutedEventArgs e)
         {
@@ -348,12 +281,27 @@ namespace InsuranceBrokerApp_UI
 
             if (chkAsistenta_P.IsChecked == true)
                 optiuni |= OptiuniPolita.AsistentaRutiera;
+            if (dpDataStart.SelectedDate == null)
+            {
+                MessageBox.Show("Selecteaza data!");
+                return;
+            }
+
+            DateTime start = dpDataStart.SelectedDate.Value;
+            DateTime expirare = CalculeazaExpirare(start);
 
             Polita p = new Polita
             {
                 Tip = (TipPolita)Enum.Parse(typeof(TipPolita), tipSelectat),
-                Optiuni = optiuni
+                Optiuni = optiuni,
+                DataInceput = start,
+                DataExpirare = expirare
             };
+            if (dpDataStart.SelectedDate == null)
+            {
+                MessageBox.Show("Selecteaza data inceput!");
+                return;
+            }
 
             if (client.Polite == null)
                 client.Polite = new List<Polita>();
@@ -372,7 +320,21 @@ namespace InsuranceBrokerApp_UI
 
             foreach (var p in c.Polite)
             {
-                lstPolite.Items.Add($"{p.Tip} | {p.Optiuni}");
+                var item = new ListBoxItem();
+
+                item.Content =
+                    $"{p.Tip} | {p.Optiuni} | {p.DataInceput.ToShortDateString()} - {p.DataExpirare.ToShortDateString()}";
+
+                if (p.DataExpirare < DateTime.Now)
+                {
+                    item.Background = Brushes.LightCoral; 
+                }
+                else
+                {
+                    item.Background = Brushes.LightGreen;
+                }
+
+                lstPolite.Items.Add(item);
             }
         }
         private void cmbClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -396,6 +358,29 @@ namespace InsuranceBrokerApp_UI
             panelHome.Visibility = Visibility.Visible;
             panelClienti.Visibility = Visibility.Collapsed;
             panelPolite.Visibility = Visibility.Collapsed;
+        }
+        DateTime CalculeazaExpirare(DateTime start)
+        {
+            if (rb1Luna.IsChecked == true)
+                return start.AddMonths(1);
+
+            if (rb6Luni.IsChecked == true)
+                return start.AddMonths(6);
+
+            if (rb12Luni.IsChecked == true)
+                return start.AddMonths(12);
+
+            return start;
+        }
+        private void DataChanged(object sender, RoutedEventArgs e)
+        {
+            if (dpDataStart.SelectedDate == null)
+                return;
+
+            DateTime start = dpDataStart.SelectedDate.Value;
+            DateTime expirare = CalculeazaExpirare(start);
+
+            txtDataExpirare.Text = expirare.ToShortDateString();
         }
 
     }

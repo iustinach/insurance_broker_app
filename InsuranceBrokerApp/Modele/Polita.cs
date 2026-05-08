@@ -18,6 +18,8 @@ namespace Modele
         public DateTime DataExpirare { get; set; }
         public TipPolita Tip { get; set; }
         public OptiuniPolita Optiuni { get; set; }
+        public DateTime DataInceput { get; set; }
+        
 
         public override string ToString()
         {

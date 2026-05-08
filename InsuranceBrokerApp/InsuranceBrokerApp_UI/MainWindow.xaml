@@ -101,20 +101,7 @@
                         <TextBlock Text="CNP"/>
                         <TextBox x:Name="txtCNP"/>
 
-                        <TextBlock Text="Tip polita" Margin="0,10,0,0"/>
-                        <StackPanel>
-                            <RadioButton x:Name="rbRCA" Content="RCA"/>
-                            <RadioButton x:Name="rbCASCO" Content="CASCO"/>
-                            <RadioButton x:Name="rbLocuinta" Content="Locuinta"/>
-                            <RadioButton x:Name="rbViata" Content="Viata"/>
-                        </StackPanel>
-
-                        <TextBlock Text="Optiuni suplimentare" Margin="0,10,0,0"/>
-                        <StackPanel>
-                            <CheckBox x:Name="chkUrgenta" Content="Urgenta"/>
-                            <CheckBox x:Name="chkSuport" Content="Suport 24/7"/>
-                            <CheckBox x:Name="chkAsistenta" Content="Asistenta rutiera"/>
-                        </StackPanel>
+                       
 
                         <StackPanel Orientation="Horizontal" Margin="0,10">
                             <Button Content="Adauga"
@@ -200,6 +187,21 @@
                         <CheckBox x:Name="chkSuport_P" Content="Suport 24/7"/>
                         <CheckBox x:Name="chkAsistenta_P" Content="Asistenta rutiera"/>
                     </StackPanel>
+                    <TextBlock Text="Data inceput" Margin="0,10,0,0"/>
+                    <DatePicker x:Name="dpDataStart"  SelectedDateChanged="DataChanged"/>
+
+                    <TextBlock Text="Durata polita" Margin="0,10,0,0"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="rb1Luna" Content="1 luna" GroupName="Durata" Checked="DataChanged"/>
+                        <RadioButton x:Name="rb6Luni" Content="6 luni" GroupName="Durata" Checked="DataChanged"/>
+                        <RadioButton x:Name="rb12Luni" Content="12 luni" GroupName="Durata" Checked="DataChanged"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Data expirare" Margin="0,10,0,0"/>
+                    <TextBox x:Name="txtDataExpirare" IsReadOnly="True"/>
+
+                    
 
                     <Button Content="Adauga polita"
                             Click="AdaugaPolita_Click"
